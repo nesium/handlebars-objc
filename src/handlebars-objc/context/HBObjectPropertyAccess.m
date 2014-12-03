@@ -127,10 +127,17 @@
         managedObjectClass = NSClassFromString(@"NSManagedObject");
     });
     
-    if (![instance isKindOfClass:managedObjectClass]) return nil;
+    if (![instance isKindOfClass:[NSArray class]]) {
+        NSMutableSet *keys = [NSMutableSet new];
+        for (NSUInteger idx = 0; idx < ((NSArray *)instance).count; idx++) {
+            [keys addObject:[@(idx) stringValue]];
+        }
+    } else if ([instance isKindOfClass:managedObjectClass]) {
+        // This is a CoreData managed object. Use its entity
+        return [self validKeysForCoreDataEntity:[instance entity]];
+    }
     
-    // This is a CoreData managed object. Use its entity
-    return [self validKeysForCoreDataEntity:[instance entity]];
+    return nil;
 }
 
 + (BOOL) isKey:(NSString*)key validForKVCOnObject:(id)object
@@ -140,6 +147,16 @@
 
 + (id) valueForKey:(NSString *)key onObject:(id)object
 {
+    static NSCharacterSet *decimalDigitCharacterSet = nil;
+    if (decimalDigitCharacterSet == nil) {
+        decimalDigitCharacterSet = [NSCharacterSet decimalDigitCharacterSet];
+    }
+    
+    if ([key stringByTrimmingCharactersInSet:decimalDigitCharacterSet].length == 0 &&
+    	[object respondsToSelector:@selector(objectAtIndexedSubscript:)]) {
+        return object[[key integerValue]];
+    }
+    
     // first, try keyed subscripting operator.
     if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) return object[key];
     
