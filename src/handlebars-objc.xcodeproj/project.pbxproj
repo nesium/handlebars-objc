@@ -1163,6 +1163,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "handlebars-objc/handlebars-objc-Prefix.pch";
 				INFOPLIST_FILE = "handlebars-objc/handlebars-objc-Info.plist";
+				INSTALL_PATH = "@rpath";
 				PRODUCT_NAME = HBHandlebars;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1178,6 +1179,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "handlebars-objc/handlebars-objc-Prefix.pch";
 				INFOPLIST_FILE = "handlebars-objc/handlebars-objc-Info.plist";
+				INSTALL_PATH = "@rpath";
 				PRODUCT_NAME = HBHandlebars;
 				WRAPPER_EXTENSION = framework;
 			};
